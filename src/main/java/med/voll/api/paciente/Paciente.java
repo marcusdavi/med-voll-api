@@ -17,7 +17,6 @@ import med.voll.api.medico.Especialidade;
 @EqualsAndHashCode(of = "id")
 public class Paciente {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -53,7 +52,7 @@ public class Paciente {
         }
     }
 
-    public void inativar() {
+    public void excluir() {
         this.ativo = false;
     }
 }
