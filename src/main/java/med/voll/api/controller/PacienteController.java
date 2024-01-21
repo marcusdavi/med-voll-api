@@ -2,13 +2,11 @@ package med.voll.api.controller;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import med.voll.api.medico.DadosAtualizacaoMedico;
 import med.voll.api.medico.DadosCadastroMedico;
 import med.voll.api.medico.Medico;
 import med.voll.api.medico.MedicoRepository;
-import med.voll.api.paciente.DadosCadastroPaciente;
-import med.voll.api.paciente.DadosListagemPaciente;
-import med.voll.api.paciente.Paciente;
-import med.voll.api.paciente.PacienteRepository;
+import med.voll.api.paciente.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +31,21 @@ public class PacienteController {
 
     @GetMapping
     public ResponseEntity<Page<DadosListagemPaciente>> findAll(@PageableDefault(size = 10, page = 0, sort = {"nome"}) Pageable paginacao) {
-        return ResponseEntity.ok(repository.findAll(paginacao)
+        return ResponseEntity.ok(repository.findAllByAtivoTrue(paginacao)
                 .map(DadosListagemPaciente::new));
+    }
+
+    @PutMapping("/{id}")
+    @Transactional
+    public void update(@PathVariable  Long id, @RequestBody @Valid DadosAtualizacaoPaciente dados) {
+        Paciente paciente = repository.getReferenceById(id);
+        paciente.atualizarInformacoes(dados);
+    }
+
+    @PatchMapping("/{id}")
+    @Transactional
+    public void toInactive(@PathVariable Long id) {
+        Paciente paciente = repository.getReferenceById(id);
+        paciente.inativar();
     }
 }

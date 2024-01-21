@@ -42,9 +42,4 @@ public class MedicoController {
         medico.inativar();
     }
 
-    @DeleteMapping("/{id}")
-    @Transactional
-    public void delete(@PathVariable Long id) {
-        repository.deleteById(id);
-    }
 }
