@@ -23,11 +23,9 @@ public class ConsultaController {
     @Autowired
     private AgendaDeConsultas agendaDeConsultas;
 
-
-
     @PostMapping
     @Transactional
-    public ResponseEntity<DadosDetalhamentoConsulta> create(@RequestBody @Valid DadosAgendamentoConsulta dados, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<DadosDetalhamentoConsulta> agendar(@RequestBody @Valid DadosAgendamentoConsulta dados, UriComponentsBuilder uriBuilder) {
         var agendamento = agendaDeConsultas.agendar(dados);
         return ResponseEntity.ok(agendamento);
     }
