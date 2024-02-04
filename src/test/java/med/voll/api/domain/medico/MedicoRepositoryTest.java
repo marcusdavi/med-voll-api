@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.DayOfWeek;
@@ -69,6 +70,70 @@ class MedicoRepositoryTest {
         // then or assert
         assertThat(medicoLivre).isEqualTo(medico);
 
+    }
+
+    @Test
+    @DisplayName("Deveria devolver lista vazia de medicos")
+    void listarMedicosCenario01() {
+
+        var medicos = repository.findAllByAtivoTrue(Pageable.ofSize(10));
+
+        // then or assert
+        assertThat(medicos.getTotalElements()).isEqualTo(0);
+
+    }
+
+    @Test
+    @DisplayName("Deveria devolver retornar 1 medico")
+    void listarMedicosCenario02() {
+
+        var medico = cadastrarMedico("Medico", "medico@voll.med", "123456", Especialidade.CARDIOLOGIA);
+
+        var medicos = repository.findAllByAtivoTrue(Pageable.ofSize(10));
+
+        assertThat(medicos.getTotalElements()).isEqualTo(1);
+        assertThat(medicos.getContent().get(0)).isEqualTo(medico);
+
+    }
+
+    @Test
+    @DisplayName("Deveria devolver medico ativo")
+    void detalharMedicosCenario01() {
+
+        var medico = cadastrarMedico("Medico", "medico@voll.med", "123456", Especialidade.CARDIOLOGIA);
+
+        var medicoResponse = repository.findAtivoById(medico.getId());
+
+        assertThat(medicoResponse).isEqualTo(true);
+
+    }
+
+    @Test
+    @DisplayName("Deveria devolver medico nulo")
+    void detalharMedicosCenario02() {
+
+        var medicoResponse = repository.findAtivoById(1L);
+
+        assertThat(medicoResponse).isEqualTo(null);
+
+    }
+
+    @Test
+    @DisplayName("Deveria devolver medico inativo")
+    void detalharMedicosCenario03() {
+
+        var medico = cadastrarMedico("Medico", "medico@voll.med", "123456", Especialidade.CARDIOLOGIA);
+        inativarMedico(medico);
+
+        var medicoResponse = repository.findAtivoById(medico.getId());
+
+        assertThat(medicoResponse).isEqualTo(false);
+
+    }
+
+    private void inativarMedico(Medico medico) {
+        medico.excluir();
+        em.persist(medico);
     }
 
     private void cadastrarConsulta(Medico medico, Paciente paciente, LocalDateTime data) {
