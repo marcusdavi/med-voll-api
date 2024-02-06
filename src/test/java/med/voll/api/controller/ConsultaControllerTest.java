@@ -1,9 +1,9 @@
 package med.voll.api.controller;
 
-import med.voll.api.domain.consulta.AgendaDeConsultas;
-import med.voll.api.domain.consulta.DadosAgendamentoConsulta;
-import med.voll.api.domain.consulta.DadosDetalhamentoConsulta;
-import med.voll.api.domain.medico.Especialidade;
+import med.voll.api.service.AgendaDeConsultasService;
+import med.voll.api.domain.to.DadosAgendamentoConsulta;
+import med.voll.api.domain.to.DadosDetalhamentoConsulta;
+import med.voll.api.domain.enums.Especialidade;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ class ConsultaControllerTest {
     private MockMvc mvc;
 
     @MockBean
-    private AgendaDeConsultas agendaDeConsultas;
+    private AgendaDeConsultasService agendaDeConsultas;
 
     @Autowired
     private JacksonTester<DadosAgendamentoConsulta> dadosAgendamentoConsultaJson;
