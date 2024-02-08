@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import med.voll.api.domain.to.DadosAtualizacaoPaciente;
 import med.voll.api.domain.to.DadosCadastroPaciente;
 
+/**
+ * Representa um paciente.
+ */
 @Table(name = "pacientes")
 @Entity(name = "Paciente")
 @Getter
@@ -16,18 +19,48 @@ import med.voll.api.domain.to.DadosCadastroPaciente;
 @EqualsAndHashCode(of = "id")
 public class Paciente {
 
+    /**
+     * O ID do paciente.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    /**
+     * O nome do paciente.
+     */
     private String nome;
+
+    /**
+     * O CPF do paciente.
+     */
     private String cpf;
+
+    /**
+     * O e-mail do paciente.
+     */
     private String email;
+
+    /**
+     * O telefone do paciente.
+     */
     private String telefone;
+
+    /**
+     * Indica se o paciente está ativo ou não.
+     */
     private Boolean ativo;
 
+    /**
+     * O endereço do paciente.
+     */
     @Embedded
     private Endereco endereco;
 
+    /**
+     * Construtor para criar um novo paciente com base nos dados de cadastro.
+     * @param dados Os dados de cadastro do paciente.
+     */
     public Paciente(DadosCadastroPaciente dados) {
         this.ativo = true;
         this.nome = dados.nome();
@@ -37,6 +70,10 @@ public class Paciente {
         this.endereco = new Endereco(dados.endereco());
     }
 
+    /**
+     * Atualiza as informações do paciente com base nos dados fornecidos.
+     * @param dados Os dados de atualização do paciente.
+     */
     public void atualizarInformacoes(DadosAtualizacaoPaciente dados) {
         if (dados.nome() != null) {
             this.nome = dados.nome();
@@ -51,6 +88,9 @@ public class Paciente {
         }
     }
 
+    /**
+     * Exclui o paciente, marcando-o como inativo.
+     */
     public void excluir() {
         this.ativo = false;
     }
