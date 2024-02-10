@@ -14,13 +14,26 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Classe de configuração para as configurações de Segurança do Spring.
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfigurations {
 
+    /**
+     * Filtro de Segurança injetado.
+     */
     @Autowired
     private SecurityFilter securityFilter;
 
+    /**
+     * Configura a cadeia de filtro de segurança.
+     *
+     * @param http Objeto HttpSecurity a ser configurado
+     * @return SecurityFilterChain configurado
+     * @throws Exception se ocorrer um erro durante a configuração
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
@@ -33,15 +46,25 @@ public class SecurityConfigurations {
                 .build();
     }
 
+    /**
+     * Fornece um bean AuthenticationManager.
+     *
+     * @param configuration Objeto AuthenticationConfiguration
+     * @return AuthenticationManager configurado
+     * @throws Exception se ocorrer um erro durante a configuração
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
+    /**
+     * Fornece um bean PasswordEncoder.
+     *
+     * @return PasswordEncoder configurado com o algoritmo BCrypt
+     */
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
-
-
 }

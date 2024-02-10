@@ -18,6 +18,13 @@ public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret;
 
+    /**
+     * Método para gerar um token JWT para o usuário fornecido.
+     *
+     * @param usuario Usuário para o qual o token será gerado
+     * @return String contendo o token JWT gerado
+     * @throws RuntimeException se ocorrer um erro ao gerar o token JWT
+     */
     public String gerarToken(Usuario usuario) {
         try {
             return JWT.create()
@@ -26,10 +33,17 @@ public class TokenService {
                     .withExpiresAt(dataExpiracao())
                     .sign(Algorithm.HMAC256(secret));
         } catch (JWTCreationException exception){
-            throw new RuntimeException("erro ao gerrar token jwt", exception);
+            throw new RuntimeException("Erro ao gerar token JWT", exception);
         }
     }
 
+    /**
+     * Método para obter o assunto (subject) do token JWT fornecido.
+     *
+     * @param tokenJWT String contendo o token JWT
+     * @return String contendo o assunto do token JWT
+     * @throws RuntimeException se o token JWT for inválido ou expirado
+     */
     public String getSubject(String tokenJWT) {
         try {
             var algoritmo = Algorithm.HMAC256(secret);
@@ -43,6 +57,11 @@ public class TokenService {
         }
     }
 
+    /**
+     * Método privado para calcular a data de expiração do token.
+     *
+     * @return Instant representando a data de expiração do token
+     */
     private Instant dataExpiracao() {
         return LocalDateTime.now()
                 .plusHours(2)
