@@ -29,7 +29,7 @@ public class TokenService {
         try {
             return JWT.create()
                     .withIssuer("API Voll.med")
-                    .withSubject(usuario.getLogin())
+                    .withSubject(usuario.getUsername())
                     .withExpiresAt(dataExpiracao())
                     .sign(Algorithm.HMAC256(secret));
         } catch (JWTCreationException exception){
